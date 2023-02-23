@@ -2,11 +2,20 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 
+const getHtmlPlugins = (chunks) => {
+    return chunks.map(chunk => new HtmlPlugin({
+        title: "React Chrome Extension",
+        filename: `${chunk}.html`,
+        chunks: [chunk]
+    }));
+};
+
 module.exports = {
     mode: "development",
     devtool: "cheap-module-source-map",
     entry: {
-      popup: path.resolve("src/popup/popup.tsx")  
+      popup: path.resolve("src/popup/popup.tsx"),
+      options: path.resolve("src/options/options.tsx")
     },
     module: {
         rules: [
@@ -30,11 +39,7 @@ module.exports = {
                 },
             ]
         }),
-        new HtmlPlugin({
-            title: "React Chrome Extension",
-            filename: "popup.html",
-            chunks: ["popup"]
-        })
+        ...getHtmlPlugins(["popup", "options"])
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"]
@@ -42,5 +47,10 @@ module.exports = {
     output: {
         filename: "[name].js",
         path: path.resolve("dist")
+    },
+    optimization: {
+        splitChunks: {
+            chunks: "all"
+        }
     }
 };
