@@ -1,4 +1,4 @@
-# React Chrome Extension*
+# React Chrome Extension
 ## Getting Started
 1. `npm install` to install dependencies
 2. `npm start` to start running the fast development mode with Webpack as well as to generate the `dist` folder
